@@ -22,8 +22,11 @@ void listas() {
     std::cout << " " << *it2;
 }
 //requiere que la pila tenga almenos un elemento, igual el vector elementos y validar
-void dameSecuenciaDecreciente(const vector<int> &elementos, vector<bool> &validar,stack<int> &pila, int fin ) {
-  int iterador = pila.top();
+
+//voy a tener que agregrar un lugar de donde empiezo
+void dameSecuenciaDecreciente(const vector<int> &elementos, vector<bool> &validar,stack<int> &pila,int inicio, int fin ) {
+  //pila top +1 porque tengo que analizar si agregar al siguiente o no
+  int iterador = inicio;
   while (iterador >= fin) {
     if (pila.size()== 0 ) {
       pila.push(iterador);
@@ -51,7 +54,8 @@ void decreciente() {
   }
   int fin = 0;
   pila.push(elementos.size()-1);
-  dameSecuenciaDecreciente(elementos,validar,pila,fin);
+  int inicio = pila.size()-1;
+  dameSecuenciaDecreciente(elementos,validar,pila,inicio,fin);
   while (pila.size() != 0) {
     cout << elementos[pila.top()]<< endl;;
     validar[pila.top()] = true;
@@ -68,7 +72,7 @@ void decrecienteMaxima(vector<int> &elementos, vector<bool> &validar,stack<int> 
   bool notermine = true;
   pila.push(elementos.size()-1); // el primer elemento es el de mas a la derecha
   int f = fin;
-  int i = pila.top();
+  int i = elementos.size()-1;
   int n = i - fin + 1;
   bool decero = false;
   while (notermine && fin <= i) {
@@ -79,7 +83,12 @@ void decrecienteMaxima(vector<int> &elementos, vector<bool> &validar,stack<int> 
       decero = false;
       validar[i] = false;
     }
-    dameSecuenciaDecreciente(elementos,validar,pila,f);
+    dameSecuenciaDecreciente(elementos,validar,pila,i,f);
+    std::cout << "sali scuencia decreciente" << std::endl;
+    std::cout << "pila size" <<pila.size() << std::endl;
+    std::cout << "longSecuMaxima" <<longSecuMaxima <<std::endl;
+    std::cout << "longPilaActual" << longPilaActual<<std::endl;
+    std::cout << "pila top" << pila.top()<<std::endl;
     if ((pila.size() == n) || diferencia(longSecuMaxima,longPilaActual,pila.top()) ) {
         notermine  = false;
       }
@@ -87,13 +96,15 @@ void decrecienteMaxima(vector<int> &elementos, vector<bool> &validar,stack<int> 
         if (pilaMaxima.size()<= pila.size()) {
           pilaMaxima = pila;
         }
-        validar[pila.top()] = true;
-        pila.pop();
-        if (pila.size()==0) {
+
+      validar[pila.top()] = true;
+      pila.pop();
+      if (pila.size()==0) {
           decero = true;
           i = i-1;
         }
         else{
+          std::cout << "saque el ultimo elemento " << std::endl;
           i = pila.top();
         }
       }
@@ -112,11 +123,33 @@ void test_1() {
       validar.push_back(true);
     }
   decrecienteMaxima(elementos,validar,pila,0);
-
+  while (pila.size() != 0) {
+    cout << elementos[pila.top()]<< endl;
+    pila.pop();
+  }
 }
+void test_2() {
+  vector<int> elementos;
+  vector<bool> validar;
+  stack<int> pila;
+  elementos.push_back(15);
+  elementos.push_back(7);
+  elementos.push_back(31);
+  elementos.push_back(24);
+  for (int i = 0; i < 4; i++) {
+      validar.push_back(true);
+    }
+  decrecienteMaxima(elementos,validar,pila,0);
+  cout << "sali" << endl;
+  while (pila.size() != 0) {
+    cout << elementos[pila.top()]<< endl;
+    pila.pop();
+  }
+}
+
 int main() {
   //listas();
-  //decreciente();
-  test_1();
+  decreciente();
+  //test_2();
   return 0;
 }
