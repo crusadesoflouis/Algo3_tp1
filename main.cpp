@@ -31,7 +31,30 @@ void decreciente() {
     pila.pop();
     }
 }
+void creciente() {
+  vector<int> elementos;
+  vector<bool> validar;
+  stack<int> pila;
+  elementos.push_back(1);
+  elementos.push_back(2);
+  elementos.push_back(3);
+  elementos.push_back(4);
+  elementos.push_back(5);
+  elementos.push_back(6);
+  elementos.push_back(7);
 
+  for (int i = 0; i < 7; i++) {
+      validar.push_back(true);
+    }
+  int inicio = 0;
+  int fin = elementos.size()-1;
+  SecuCreciente(elementos,validar,pila,inicio,fin);
+  while (pila.size() != 0) {
+    cout << elementos[pila.top()]<< endl;;
+    validar[pila.top()] = true;
+    pila.pop();
+    }
+}
 void test_1() {
   vector<int> elementos;
   vector<bool> validar;
@@ -62,8 +85,15 @@ void test_2() {
   elementos.push_back(5);
   elementos.push_back(6);
   elementos.push_back(7);
+  elementos.push_back(1);
+  elementos.push_back(2);
+  elementos.push_back(3);
+  elementos.push_back(4);
+  elementos.push_back(5);
+  elementos.push_back(6);
+  elementos.push_back(7);
 
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < 14; i++) {
       validar.push_back(true);
     }
   int inicio = elementos.size()-1;
@@ -73,10 +103,67 @@ void test_2() {
     pila.pop();
   }
 }
+void test_3() {
+  vector<int> elementos;
+  vector<bool> validar;
+  stack<int> pila;
+  elementos.push_back(1);
+  elementos.push_back(2);
+  elementos.push_back(3);
+  elementos.push_back(4);
+  elementos.push_back(5);
+  elementos.push_back(6);
+  elementos.push_back(7);
+  elementos.push_back(1);
+  elementos.push_back(2);
+  elementos.push_back(3);
+  elementos.push_back(4);
+  elementos.push_back(5);
+  elementos.push_back(6);
+  elementos.push_back(7);
+
+  for (int i = 0; i < 14; i++) {
+      validar.push_back(true);
+    }
+  int fin = elementos.size()-1;
+  rojos(elementos,validar,pila,0,fin);
+  while (pila.size() != 0) {
+    cout << elementos[pila.top()]<< endl;
+    pila.pop();
+  }
+}
+
+void backtracking() {
+  vector<int> elementos;
+  vector<bool> validar;
+  elementos.push_back(1);
+  elementos.push_back(2);
+  elementos.push_back(3);
+  elementos.push_back(4);
+  elementos.push_back(5);
+  elementos.push_back(6);
+  elementos.push_back(7);
+  elementos.push_back(1);
+  elementos.push_back(2);
+  elementos.push_back(3);
+  elementos.push_back(4);
+  elementos.push_back(5);
+  elementos.push_back(6);
+  elementos.push_back(7);
+  for (int i = 0; i < 14; i++) {
+      validar.push_back(true);
+    }
+  int ocupados = CantidadPosicionesOcupadas(elementos,validar);
+  cout << "los ocupados son "<< ocupados << endl;
+}
+
 
 int main() {
   //decreciente();
   //test_1();
-  test_2();
+  //test_2();
+  //creciente();
+  //test_3();
+  backtracking();
   return 0;
 }
