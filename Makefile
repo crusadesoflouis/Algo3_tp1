@@ -1,5 +1,5 @@
 all:
-	g++ -g main.cpp -o main
+	g++ -std=c++0x -g main.cpp -o main
 	./main
 	rm -rf *o main
 valgrind:
