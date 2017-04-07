@@ -186,21 +186,22 @@ void backtracking_2() {
 void backtracking_3() {
   vector<int> elementos;
   vector<bool> validar;
+  elementos.push_back(0);
+  elementos.push_back(8);
+  elementos.push_back(4);
+  elementos.push_back(12);
+  elementos.push_back(2);
+  elementos.push_back(10);
+  elementos.push_back(6);
+  elementos.push_back(14);
+  elementos.push_back(1);
+  elementos.push_back(9);
+  elementos.push_back(5);
+  elementos.push_back(13);
   elementos.push_back(3);
   elementos.push_back(11);
-  elementos.push_back(0);
-  elementos.push_back(1);
-  elementos.push_back(3);
-  elementos.push_back(5);
-  elementos.push_back(2);
-  elementos.push_back(4);
-  elementos.push_back(1);
-  elementos.push_back(0);
-  elementos.push_back(9);
-  elementos.push_back(3);
 
-
-  for (int i = 0; i < 12; i++) {
+  for (int i = 0; i < elementos.size(); i++) {
       validar.push_back(true);
     }
   int libres = CantidadPosicionesOcupadas(elementos,validar);
@@ -213,7 +214,7 @@ void test_random() {
   vector<int> elementos;
   vector<bool> validar;
   int saltos = 2;
-  int rango = 25;
+  int rango = 26;
   int repeticiones = 10;
   archivo << rango <<"\n";
   for (int i = 0; i < rango; i++) {
@@ -243,7 +244,7 @@ void test_iguales() {
   vector<bool> validar;
   int valor = 1;
   int saltos = 2;
-  int rango = 25;
+  int rango = 26;
   int repeticiones = 10;
   archivo << rango <<"\n";
   for (int i = 0; i < rango; i++) {
@@ -263,8 +264,8 @@ void test_iguales() {
   }
 }
 int main() {
-  //backtracking_3();
-  test_iguales();
+  backtracking_3();
+  //test_iguales();
   //test_random();
   return 0;
 }

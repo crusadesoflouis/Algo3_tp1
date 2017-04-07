@@ -209,11 +209,11 @@ void backtracking_3() {
 
 
 void test_random() {
-  ofstream archivo ("resultados_random_ej1.txt");
+  ofstream archivo ("resultados_random_ej2.txt");
   vector<int> elementos;
   vector<bool> validar;
   int saltos = 2;
-  int rango = 25;
+  int rango = 26;
   int repeticiones = 10;
   archivo << rango <<"\n";
   for (int i = 0; i < rango; i++) {
@@ -238,12 +238,12 @@ void test_random() {
 
 
 void test_iguales() {
-  ofstream archivo ("resultados_iguales_ej1.txt");
+  ofstream archivo ("resultados_iguales_ej2.txt");
   vector<int> elementos;
   vector<bool> validar;
   int valor = 1;
   int saltos = 2;
-  int rango = 25;
+  int rango = 26;
   int repeticiones = 10;
   archivo << rango <<"\n";
   for (int i = 0; i < rango; i++) {

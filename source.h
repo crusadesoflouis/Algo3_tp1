@@ -57,24 +57,31 @@ void EstablecerValidos(stack<int> pilaMaxima,vector<bool> validar) {
 void subsecuRojaMaxima(const vector<int> &elementos, vector<bool> &validar, stack<int> &pilaMaxima,stack<int> &pila,int fin,int it,int n,bool &notermine) {
   while (pila.size() != 0 && notermine) {
 
-    while (it <= fin && notermine ) {
-      SecuCreciente(elementos,validar,pila,it,fin);
-      if (pilaMaxima.size()< pila.size()) {
-        pilaMaxima = pila;
+    int losquefaltan = fin-it;
+    int libres = it -pila.size()-1;
+    if (libres>losquefaltan) {
+      notermine = false;
+    }
+    else{
+      while (it <= fin && notermine ) {
+        SecuCreciente(elementos,validar,pila,it,fin);
+        if (pilaMaxima.size()< pila.size()) {
+          pilaMaxima = pila;
+        }
+        if ((pila.size() == n)) {
+          notermine = false;
+        }
+        else{
+          it = pila.top()+1;
+          validar[pila.top()]= true;
+          pila.pop();
+        }
       }
-      if ((pila.size() == n)) {
-        notermine = false;
-      }
-      else{
+      if (pila.size() != 0) {
         it = pila.top()+1;
         validar[pila.top()]= true;
         pila.pop();
       }
-    }
-    if (pila.size() != 0) {
-      it = pila.top()+1;
-      validar[pila.top()]= true;
-      pila.pop();
     }
   }
 }
@@ -101,24 +108,31 @@ void rojos(const vector<int> &elementos, vector<bool> &validar,stack<int> &pilaM
 // busca la mejor secuencia entre IT y fin
 void subSecuAzulMaxima(const vector<int> &elementos, vector<bool> &validar, stack<int> &pilaMaxima,stack<int> &pila,int fin,int it,int n,bool &notermine) {
   while (pila.size() != 0 && notermine) {
-    while (it <= fin && notermine ) {
-      SecuDecreciente(elementos,validar,pila,it,fin);
-      if (pilaMaxima.size()< pila.size()) {
-        pilaMaxima = pila;
+    int losquefaltan = fin-it;
+    int libres = it -pila.size()-1;
+    if (libres>losquefaltan) {
+      notermine = false;
+    }
+    else{
+      while (it <= fin && notermine ) {
+        SecuDecreciente(elementos,validar,pila,it,fin);
+        if (pilaMaxima.size()< pila.size()) {
+          pilaMaxima = pila;
+        }
+        if ((pila.size() == n)) {
+          notermine = false;
+        }
+        else{
+          it = pila.top()+1;
+          validar[pila.top()]= true;
+          pila.pop();
+        }
       }
-      if ((pila.size() == n)) {
-        notermine = false;
-      }
-      else{
+      if (pila.size() != 0) {
         it = pila.top()+1;
         validar[pila.top()]= true;
         pila.pop();
       }
-    }
-    if (pila.size() != 0) {
-      it = pila.top()+1;
-      validar[pila.top()]= true;
-      pila.pop();
     }
   }
 }
