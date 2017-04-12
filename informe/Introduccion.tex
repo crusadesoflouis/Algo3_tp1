@@ -1,7 +1,17 @@
 \section{Introducción}
 
-En este informe, vamos a analizar la resolución de un mismo problema, en este caso el de encontrar dos subsecuencias, una creciente y una decreciente dentro de una secuencia de numeros, de manera tal
-que ambas secuencias tentas pintadas la mayor cantidad de números posible.
+En este informe, vamos a analizar resoluciones distintas para el problema presentado a continuación.
+
+Problema: Dada una secuencia de numeros naturales, se pide encontrar pintar de color rojo a una secuencia estrictamente creciente y de color azul a una secuencia estrictamente decreciente
+de manera tal que se maximice la cantidad de elementos pintados.
+
+Por ejemplo dada la secuencia 5 8 1 0 4 7 8  rojo = 0 4 7 8 azul = 5 8 1
+1 2 3 3 2 1 1 2 3 4 4 3 2 1 = rojo 1 2 3 4 azul =  4 3 2 1
+
+1 2 3 4 4  = 1 2 3 4,  4
+1 2 3 4 4 4 = 1 2 3 4, 4
+
+
 
 Para ello resolveremos este problema de tres formas distintas:
 La primera será resuelta por medio de Backtracking,en la segunda se le agregará una poda al mismo algoritmo del ejercicio 1 y por ultimo se explicará un algoritmo de programacion dinámica.
