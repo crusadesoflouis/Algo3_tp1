@@ -1,8 +1,7 @@
 \contentsline {section}{\numberline {1}Introducci\IeC {\'o}n}{2}
-\contentsline {section}{\numberline {2}Problema I: Cruzando el puente}{3}
+\contentsline {section}{\numberline {2}Problema I: Bactracking}{3}
 \contentsline {subsection}{\numberline {2.1}Introducci\IeC {\'o}n}{3}
-\contentsline {subsubsection}{\numberline {2.1.1}Ejemplos}{3}
-\contentsline {subsection}{\numberline {2.2}Resoluci\IeC {\'o}n del problema}{4}
+\contentsline {subsection}{\numberline {2.2}Resoluci\IeC {\'o}n del problema y algoritmo}{3}
 \contentsline {subsection}{\numberline {2.3}Algoritmos}{5}
 \contentsline {subsection}{\numberline {2.4}Correctitud}{8}
 \contentsline {subsection}{\numberline {2.5}Complejidad del algoritmo}{9}

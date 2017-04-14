@@ -283,10 +283,38 @@ void test_iguales() {
 
   }
 }
+
+
+void peorpeorcaso() {
+  ofstream archivo ("resultados_peor_peor_ej1.txt");
+  vector<int> peor{1,1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40};
+  vector<bool> validar;
+  vector<int> elementos;
+  int saltos = 2;
+  int rango = 16;
+  int repeticiones = 5;
+  archivo << rango <<"\n";
+  for (int i = 0; i < rango; i++) {
+    int tamanio = saltos*(i+1);
+    archivo  << tamanio<< " \n" ;
+      for (int j = elementos.size(); j < tamanio; j++) {
+        elementos.push_back(peor[j]);
+        validar.push_back(true);
+      }
+      for (int j = 0; j < repeticiones; j++) {
+        auto start = ya();
+        int libres = CantidadPosicionesOcupadas(elementos,validar);
+        auto end = ya();
+        archivo << chrono::duration_cast<std::chrono::milliseconds>(end-start).count()<< "\n";
+      }
+
+  }
+}
 int main() {
   //backtracking_3();
   //test_iguales();
   //test_random();
-  test_peorcaso();
+  //test_peorcaso();
+  peorpeorcaso();
   return 0;
 }

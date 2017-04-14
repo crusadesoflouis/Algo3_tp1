@@ -1,149 +1,67 @@
-\section{Problema I: Cruzando el puente}
+\section{Problema I: Bactracking}
 
 %El pseudocodigo de enviar tipos esta muy hablado (lo cual no tengo idea si siquiera es posible escribirlo de otra forma)
 %En el primer grafico de tiempos, no se dice en que unidad de tiempo esta medido. En el segundo grafico tmb
 %Falta explicar los experimentos y decir que sucede en ellos
 %Faltan los test para corroborar correctitud del algoritmo (ejemplos de resultados del algoritmo para mostrar que funcionan)
 \subsection{Introducción}
+Vamos a utilizar un algoritmo de backtraking que, en el peor caso debería decorrer todas las ramas del arbol de soluciones. Dicha complegidad será exponencial debido a que cada
+valor  tiene tres posibilidades, ser pintado de rojo, azul o no ser pintado.
 
-En el problema se pide que los arqueólogos y la tribu local crucen un puente colgante. Se tiene una sola linterna para cruzar el puente y es de noche. El puente puede ser cruzado de hasta dos personas a la vez y se debe cruzar con la linterna para iluminar el camino.
-Además, la gente de la tribu es caníbal y se pide que la cantidad de arqueólogos que haya en cualquier lado del puente sea mayor o igual a la de caníbales para evitar ser devorados. 
 
-Cada persona tarda un tiempo fijo en cruzar el puente. Si cruzan dos personas, tardarán lo mismo que la persona más lenta.
+\begin{tikzpicture}[sibling distance=10em,
+  every node/.style = {shape=rectangle, rounded corners,
+    draw, align=center,
+    top color=white, bottom color=white}]]
+  \node {v1,v2,v3}
+    child { node {v1, Rojo}
+        child{ node {v2, Rojo}
+            child{ node {v3, Rojo}}
+            child{ node {v3, Azul}}
+            child{ node {v3, SC}}}
+        child{ node {v2, Azul}}
+        child{ node {v2, SC}}}
+    child { node {v1, Azul}}
+    child { node {v1, SC}
+ };
+\end{tikzpicture}
+\vspace*{5mm}
 
-En el ejercicio se busca minimizar el tiempo en el que todos cruzan el puente, si es que hay una forma de hacerlo sin que ningún caníbal se coma a ningún arqueólogo. 
+Cada yba de las hojas ultimas hojas del arbol son las posibles soluciones. En particular este arbol al tener 3 hijos va a tener 3 a la n soluciones.
+\vspace*{5mm}
 
-\subsubsection{Ejemplos}
-En los siguientes ejemplos mostraremos las soluciones a dos situaciones sin caníbales, en las que los arqueólogos deben cruzar al otro lado. Los arqueólogos serán notados como a(t), en donde t indica el tiempo que tardan en cruzar el puente.
-\begin{center}
-\begin{tabular}{| l | l | l || l |}
-    \hline
-    Origen & Movimiento & Destino & Tiempo \\
-    \hline
-    \multicolumn{4}{|l|}{Ejemplo 1}  \\
-    \hline
-    \hline
-    Estado 0 & & & \\
-%    \hline			
-    a(1),a(2),a(7),a(8) & - & - & 0\\
-    \hline
-    Estado 1: ida & & &\\
-  %  \hline
-    a(7), a(8) & a(1), a(2) $\rightarrow$ & - & 2\\
-    \hline  
-    Estado 2: vuelta & & & \\
-  %  \hline
-    a(7), a(8) & $\leftarrow$ a(1) & a(2) & 3\\
-    \hline  
-    Estado 3: ida & & & \\
-  %  \hline
-    a(1) & a(7), a(8) $\rightarrow$ & a(2) & 11\\
-    \hline  
-    Estado 4: vuelta & & & \\
-  %  \hline
-    a(1) & $\leftarrow$ a(2) & a(7), a(8) & 13\\
-    \hline  
-    Estado 5: ida & & & \\
-  %  \hline
-     - & a(1), a(2) $\rightarrow$ & a(7), a(8) & 15\\
-    \hline  
-    Estado 6 & & & \\
-  %  \hline
-    - & - & a(1), a(2), a(7), a(8) & 15\\
-    \hline
-    \hline
-     \multicolumn{4}{|l|}{Ejemplo 2}  \\
-    \hline
-    \hline
-    Estado 0 & & & \\
-  %  \hline			
-    a(1),a(9),a(10),a(11) & - & - & 0\\
-    \hline
-    Estado 1: ida & & & \\
-  %  \hline
-    a(10), a(11) & a(1), a(9) $\rightarrow$ & - & 9\\
-    \hline  
-    Estado 2: vuelta & & & \\
-  %  \hline
-    a(10), a(11) & $\leftarrow$ a(1) & a(9) & 10\\
-    \hline  
-    Estado 3: ida & & & \\
-  %  \hline
-    a(11) & a(1), a(10) $\rightarrow$ & a(9) & 20\\
-    \hline  
-    Estado 4: vuelta & & & \\
-  %  \hline
-    a(11) & $\leftarrow$ a(1) & a(9), a(10) & 21\\
-    \hline  
-    Estado 5: ida & & & \\
-  %  \hline
-     - & a(1), a(11) $\rightarrow$ & a(9), a(10) & 32\\
-    \hline  
-    Estado 6 & & & \\
-  %  \hline
-    - & - & a(1), a(9), a(10), a(11) & 32\\
-    \hline
-\end{tabular}
-\end{center}
 
-\newpage
-\subsection{Resolución del problema}
-El problema se resolvió con backtracking. 
-Este algoritmo se eligió pues para saber cuanto se tarda en llegar al estado final (todos en la orilla destino) necesitamos hacer todos los pasos válidos hasta llegar al mismo y sumar cuanto tiempo cuesta cada acción (enviar a alguien por el puente). \'Esto es b\'asicamente recorrer el arbol de backtracking.
-\\
+\subsection{Resolución del problema y representación}
+Para resolver este problema con backtracing, se iterará en toda la lista substecuencias de tamaño 1 hasta el tamaño total de la secuencia
+buscando la combinación maxima de elementos rojos y azules pintados. Para realizarlo presentaré el siguiente algoritmo.
 
-Podemos observar por medio de los ejemplos que no hay una forma clara de resolverlo sin utilizar este método: minimizar el tiempo de las idas sirve en el ejemplo 1 pero no en el ejemplo 2. 
-Minimizar el tiempo de las vueltas funciona para el ejemplo 2 pero no para el 1. 
+
+Dicho  algoritmo tine como representacion dos vectores uno de enteros no negativos llamado elementos, otro de booleanos llamado validar y dos pilas una roja y otra azul con las siguientes caracteristicas:
+\begin{itemize}
+    \item Los elementos de las pilas son las posiciones de los elementos de las secuencias.
+    \item Una pila es estrictamente creciente y la otra decreciente.
+    \item Las pilas son disyuntas entre si.
+    \item Todos los elementos de las pilas estan en elementos.
+    \item Cuando un elemento ingresa a una pila, se asigna false a la posición de validar del elemento que ingreso.
+    \item el vector validad me permite saber que elemento puedo agregar a la pila.
+\end{itemize}
+
+\subsection{Algoritmo}
+
+
+El algoritmo consta de las siguientes funciones:
+
+La función rojos se encarga de encontrar la subsecuencia maxima entre 0 e i, luego la funcion azules hace lo mismo pero siempre entre 0 y n
+cada vez que un elemento es agregado a rojos o a azules, el vector validar se establece en falso para dicha posicion.
+
+
+
+Podemos observar por medio de los ejemplos que no hay una forma clara de resolverlo sin utilizar este método: minimizar el tiempo de las idas sirve en el ejemplo 1 pero no en el ejemplo 2.
+Minimizar el tiempo de las vueltas funciona para el ejemplo 2 pero no para el 1.
 También podemos notar que no hay un principio de optimalidad claro: el estado 3 de menor tiempo se consigue siguiendo los pasos del ejemplo 1, pero el ejemplo 2 requiere otro estado 3 para dar el resultado óptimo.
 
 \vspace*{5mm}
-\textbf{Definición:} Un estado describe la ubicación de cada arqueólogo y caníbal en el problema, y la ubicación de la linterna. En los estados los arqueólogos y caníbales están en una u otra orilla, pero nunca en el puente.
 
-\vspace*{5mm}
-Nos movemos de un estado posible del problema a otro analizando quienes pueden cruzar el puente. De ésta forma podamos los estados no accesibles, y los que accederlos cuesta más que una solución previamente encontrada.
-
-Tenemos en cuenta que los movimientos permitidos pueden ser estados ya visitados. Para evitar ello debemos guardar los estados accedidos y el tiempo que hemos tardado en accederlos, para podar las ramas que vuelvan a encontrarlos en un tiempo mayor.
-
-Verificando ambas cosas, el algoritmo crea un backtracking donde cada nodo del árbol que representa es un estado, y sus nodos hijos son los estados a los que se puede acceder realizando movimientos válidos siempre y cuando no sean estados ya visitados en menor tiempo.
-
-\vspace*{5mm}
-\begin{center}
-\begin{tikzpicture}
-  [
-    grow                    = right,
-    sibling distance        = 5em,
-    level distance          = 20em,
-    edge from parent/.style = {draw, -latex},
-    every node/.style       = {font=\footnotesize},
-    sloped
-  ]
-\node [rectangle, rounded corners, draw] (z){Estado}
-    child {node [rectangle, rounded corners, draw] {$\binom{N}{2}$ Estados}
-              edge from parent node [above, align=center] {Enviar 2 arq.}
-    }
-    child {node [rectangle, rounded corners, draw] {$\binom{M}{2}$ Estados}
-              edge from parent node [above, align=center] {Enviar 2 can.}
-    }
-    child {node [rectangle, rounded corners, draw] {$\binom{N}{1}*\binom{M}{1}$ Estados}
-              edge from parent node [above, align=center] {Enviar 1 de cada}
-    }
-    child {node [rectangle, rounded corners, draw] (a) {$\binom{N}{1}$ Estados}
-              edge from parent node [above, align=center] {Enviar 1 arq.}
-    }
-    child {node [rectangle, rounded corners, draw] (a) {$\binom{M}{1}$ Estados}
-              edge from parent node [above, align=center] {Enviar 1 can.}
-    };
-\end{tikzpicture}
-\end{center}
-\vspace*{5mm}
-
-Notar que la cantidad de hijos de cada nodo es $\binom{N}{2} + \binom{N}{2} + \binom{N}{1} * \binom{M}{1} + \binom{N}{1} + \binom{M}{1} = \binom{N+M}{2} + \binom{N+M}{1} = \frac{(N+M)*(N+M-1)}{2} + N + M  = \frac{{(N+M)}^2 + N + M}{2}$ que es 
-\[
-\mathcal{O}({(N+M)}^2)
-\]
-
-\newpage
-\subsection{Algoritmos}
 Nuestra solución primero verifica que no haya más caníbales que arqueólogos, de haber algún arqueólogo.
 En ese caso, ya en el estado inicial los caníbales se los comerían.
 
@@ -154,26 +72,26 @@ Luego se arma el puente que cuenta con 2 objetos ``orilla'' y métodos para move
 \begin{algorithmic}[1]
   \Procedure{resolver}{\texttt{List<Long>} arq, \texttt{List<Long>} can} $\to $ \texttt{long}
     \State \textbf{//Verifico si no hay solución.}
-    
+
     \If {arq.size() $<$ can.size() $\land$ arq.size() $>$ 0}
 		\State	return -1;
 	\EndIf
-    
+
 	\State	tTotal $\gets$ $\infty$;
 
 	\State	Orilla origen $\gets$ new Orilla(arq, can);	\State \textbf{//orilla con todos al comienzo}
-	
+
 	\State	Orilla destino $\gets$ new Orilla();
 	\State \textbf{	//orilla destino}
 
 	\State	Puente puente $\gets$ new Puente(origen, destino)
-	
+
 	\State	estados $\gets$ new ArbolEstados(arq.size(),can.size());
-	
+
 	\State	res $\gets$ Ida(puente, 0);
-		
+
 	\State return res
-	
+
  \EndProcedure
 \end{algorithmic}
 \underline{Complejidad:} $\mathcal{O}(N+M) + \mathcal{O}(ida)$
@@ -181,9 +99,9 @@ Luego se arma el puente que cuenta con 2 objetos ``orilla'' y métodos para move
 \vspace*{5mm}
 \end{algorithm}
 
-Como recorrer una rama del árbol de backtracking es equivalente a moverse de un estado a otro inmediato (enviando una sola vez gente por el puente), y siendo que se pueden tanto enviar como recibir hasta 2 personas, los estados pueden repetirse. 
+Como recorrer una rama del árbol de backtracking es equivalente a moverse de un estado a otro inmediato (enviando una sola vez gente por el puente), y siendo que se pueden tanto enviar como recibir hasta 2 personas, los estados pueden repetirse.
 
-Para eso creamos un árbol de estados, el cual tiene N+1 nodos representando cada uno la cantidad de arqueólogos que tiene una orilla, y cada uno de estos nodos tiene M+1 nodos hijos, representando la cantidad de can\'ibales en la misma orilla. 
+Para eso creamos un árbol de estados, el cual tiene N+1 nodos representando cada uno la cantidad de arqueólogos que tiene una orilla, y cada uno de estos nodos tiene M+1 nodos hijos, representando la cantidad de can\'ibales en la misma orilla.
 Cada nodo de can\'ibales posee una lista con todos los estados donde la orilla guardada tiene la cantidad de arqueólogos y caníbales correspondientes a la rama.
 \\
 
@@ -225,10 +143,10 @@ child {node [circle,draw] (l) {M}
 \end{center}
 \newpage
 \vspace*{5mm}
-Verificar el estado es equivalente a recorrer los N+1 nodos representando la cantidad de arqueólogos y luego los M+1 nodos de los caníbales hasta dar con la lista de estados con esas cantidades. 
-Luego, hay que recorrer una lista de estados que potencialmente tiene todas las combinaciones de estados sin repetici\'on, que a lo sumo son 
+Verificar el estado es equivalente a recorrer los N+1 nodos representando la cantidad de arqueólogos y luego los M+1 nodos de los caníbales hasta dar con la lista de estados con esas cantidades.
+Luego, hay que recorrer una lista de estados que potencialmente tiene todas las combinaciones de estados sin repetici\'on, que a lo sumo son
 \[
-\binom{N+M}{(N+M)/2}  
+\binom{N+M}{(N+M)/2}
 \]
 
 Los estados se guardan y verifican antes de enviar personas por el puente, en las funciones \textit{ida()} y \textit{vuelta()}.
@@ -252,7 +170,7 @@ Mostraremos como creamos todas las ramas donde enviamos 2 arqueólogos. Primero,
 	    \State \State return $Math.max(tiempo, tiempo2)$
     \EndProcedure
 \end{algorithmic}
-\underline{Complejidad:} 
+\underline{Complejidad:}
 $\mathcal{O}(N) + \mathcal{O}(1) + \mathcal{O}(N) + \mathcal{O}(1) = \mathcal{O}(N)$
 
 \vspace*{5mm}
@@ -289,19 +207,19 @@ La funcion \textit{dif()} devuelve la cantidad de can\'ibales de una orilla meno
 	\State \State return $tVueltaMin$
  \EndProcedure
 \end{algorithmic}
-\underline{Complejidad:} 
+\underline{Complejidad:}
 $\mathcal{O}(N^2) * (\mathcal{O}(enviarArq()) + \mathcal{O}(Ida()))$= $\mathcal{O}(N^3) + \mathcal{O}(N^2)*\mathcal{O}(Ida())\Rightarrow \mathcal{O}(N^3)$+ recursión.
 
 \vspace*{5mm}
-\underline{Justificación:} Iteramos sobre todas las combinaciones de 2 arqueólogos posibles, y los movemos de una orilla a la otra. 
-Moverlo cuesta lo mismo que recorrer la lista de arqueólogos y eliminar el buscado, que es $\mathcal{O}(N)$. 
+\underline{Justificación:} Iteramos sobre todas las combinaciones de 2 arqueólogos posibles, y los movemos de una orilla a la otra.
+Moverlo cuesta lo mismo que recorrer la lista de arqueólogos y eliminar el buscado, que es $\mathcal{O}(N)$.
 Luego, llamamos a la función ida (o vuelta, que tiene la misma complejidad)
 \end{algorithm}
 
-\underline{Observaciones:} 
+\underline{Observaciones:}
 \begin{itemize}
     \item De aqu\'i en m\'as omitiremos el \textit{+recursi\'on} en los c\'alculos de complejidad dado que luego calcularemos la complejidad total del algoritmo en base al costo de los nodos sin la recursi\'on.
-    \item enviarArq(i,j) tiene la misma complejidad que enviarArq(i), vuelveArq(i,j) y vuelveArq(i). Idem para las funciones sobre caníbales, que todas son del orden $\mathcal{O}(M^3)$. enviarAmbos() y vuelvenAmbos() son del orden $\mathcal{O}(N*M * (N+M))$. Todas las complejidades podrían escribirse como $\mathcal{O}({max(N,M)}^3)$ o $\mathcal{O}({(N + M)}^3)$ 
+    \item enviarArq(i,j) tiene la misma complejidad que enviarArq(i), vuelveArq(i,j) y vuelveArq(i). Idem para las funciones sobre caníbales, que todas son del orden $\mathcal{O}(M^3)$. enviarAmbos() y vuelvenAmbos() son del orden $\mathcal{O}(N*M * (N+M))$. Todas las complejidades podrían escribirse como $\mathcal{O}({max(N,M)}^3)$ o $\mathcal{O}({(N + M)}^3)$
 \end{itemize}
 \begin{comment}
 Creemos que calcular el tiempo de enviar los arqueólogos a la otra orilla se podría reducir a $\mathcal{O}(1)$ con un iterador con lo que el algoritmo sería $\mathcal{O}(N^2)$ + recursión. En nuestro intento el código no andaba y decidimos dejarlo como se encuentra en la versión final.
@@ -325,24 +243,24 @@ Por último, los métodos principales que representan los nodos del backtracking
   \Procedure{Ida}{Puente p, long tParcial} $\to $ \texttt{long}
   \State Ordeno la orilla origen (para comparar correctamente los estados)
   \State Verifico que éste estado no haya sido alcanzado previamente en un tiempo menor \\ con checkEstado().
-  \State 
+  \State
   \State Pruebo todas las formas de enviar 2 arqueólogos.
   \State Pruebo todas las formas de enviar 2 caníbales.
   \State Pruebo todas las formas de enviar 1 arqueólogo y 1 caníbal.
   \State Pruebo todas las formas de enviar 1 arqueólogo.
   \State Pruebo todas las formas de enviar 1 caníbal.
-  \State 
+  \State
   \State Si ninguna de las anteriores fue posible o tardaron más que una solución previa, devuelvo -1.
   \State De otra forma, devuelvo el tiempo que cuesta la mejor solución a partir del estado actual.
  \EndProcedure
 \end{algorithmic}
-\underline{Complejidad:} 
+\underline{Complejidad:}
  $\mathcal{O}(Sort()) + \mathcal{O}(checkEstado()) + \mathcal{O}(5*pruebo[...]())$ = $\mathcal{O}((N+M)*log_2(N+M)) + \mathcal{O}(\binom{N+M}{(N+M)/2}) + \mathcal{O}(5*max(N,M)^3) = \mathcal{O}(\binom{N+M}{(N+M)/2}) = \mathcal{O}((N+M)!)$
- 
+
  \vspace*{5mm}
  \underline{Justificación:}
  Ordenamos con Collections.sort() que está documentado como $\mathcal{O}((N+M)*log_2(N+M))$. El tiempo de checkEstado() se justificó en el dibujo del árbol de estados. Luego, si el estado no fue previamente visitado en un tiempo menor, ejecutamos 5 funciones con el mismo tiempo que prueboEnviar2Arqueologos().
- 
+
 \end{algorithm}
 \begin{comment}
 \underline{Observaciones:}
@@ -350,7 +268,7 @@ Por último, los métodos principales que representan los nodos del backtracking
 \end{comment}
 
 En una versión anterior de nuestro código, el método \textit{vuelta()} evaluaba los métodos para enviar personas a la orilla origen en el mismo orden que \textit{ida()}.
-En un análisis posterior notamos que salvo un caso (3 arqueólogos y 3 caníbales) los únicos movimientos que se utilizaban en la solución óptima eran de enviar 2 personas a la orilla destino y retornar una. 
+En un análisis posterior notamos que salvo un caso (3 arqueólogos y 3 caníbales) los únicos movimientos que se utilizaban en la solución óptima eran de enviar 2 personas a la orilla destino y retornar una.
 
 Si bien no pudimos probar cuánto se utilizan las opciones de enviar una persona o de retornar 2, mostraremos en la sección de experimentación la diferencia de tiempos entre ése código y el de la versión final, donde \textit{vuelta()} primero evalúa retornar una sola persona a la orilla origen.
 
@@ -361,10 +279,10 @@ Si bien no pudimos probar cuánto se utilizan las opciones de enviar una persona
 Recorremos de a una rama a la vez hasta el final. Una vez que llegamos al final de la rama, retrocedemos un estado en la rama, llamémoslo E, y vemos si existe otra rama no analizada que se pueda bifurcar a partir de este estado. Si existe, la analizamos de la misma forma. Cuando terminamos de analizar la rama, al ir retrocediendo terminamos en el mismo estado E. Luego verificamos si quedan más ramas para repetir el proceso, o si no hay más ramas, retrocedemos en la rama hasta un estado E' y repetimos el proceso hasta analizar todos los estados, llegando hasta la raíz del árbol que se forma. Cuando desde la raíz no hay más bifurcaciones sin analizar, el algoritmo termina porque analizó todos los estados que podrían ser soluciones. Si hay estados que fueron podados, fue porque sabemos que no eran soluciones deseadas:
 
 Las cotas de tiempos podan estados que se acceden en un tiempo mayor a una solución anteriormente encontrada.
-Por lo tanto, no evita que encontremos la solución óptima. 
+Por lo tanto, no evita que encontremos la solución óptima.
 Tampoco las podas que no nos permiten movernos a estados inválidos, pues la solución óptima requiere que todos los pasos sean válidos.
  \\
- 
+
 \textbf{Reviso todas los estados alcanzables desde el estado inicial:}
 \\
 Quiero ver que puedo acceder a todo estado $E_i$ que sea válido y alcanzable desde el estado inicial por una cantidad finita de pasos.
@@ -384,16 +302,16 @@ Quiero ver que puedo acceder a todo estado $E_i$ que sea válido y alcanzable de
 \begin{itemize}
     \item Si el conjunto de los estados $E_i$ es vacío, entonces el estado $E_{i+1}$ no es un estado válido, dado que no hay una combinación de movimientos válidos a partir del estado inicial con la cual llegar a este estado. Como no existe un estado anterior válidamente alcanzable, la propiedad P(i+1) resulta ser verdadera.
 
-    \item Si el conjunto de estados no es vacío, entonces para todos los estados $E_{i}$ puedo realizar alguna de las operaciones para mover algún arqueólogo o caníbal. 
+    \item Si el conjunto de estados no es vacío, entonces para todos los estados $E_{i}$ puedo realizar alguna de las operaciones para mover algún arqueólogo o caníbal.
     \begin{itemize}
     \item Si ningún estado puede realizar alguna operación que sea válida (es decir, que puedan trasladarse personas con la linterna y que los caníbales no devoren a alg\'un arqueólogos), entonces el estado $E_{i+1}$ no es un estado para el cual exista alguna secuencia de movimientos válidos de arqueólogos y/o caníbales para alcanzarlo. Como no se cumple esta propiedad, P(i+1) resulta ser verdadera.
-    
+
     \item Nombremos a la operación valida desde el estado $E_{i}$ para llegar a $E_{i+1}$ como $Op_{i+1}$. Llamemos también $S_i$ a la secuencia de operaciones válidas que se utiliza para llegar al estado $E_{i}$, la cual existe por HI. Si agregamos $Op_{i+1}$ al final de la secuencia $S_i$, obtenemos una secuencia de operaciones válidas desde el estado inicial hasta el estado $E_{i+1}$ por la cual accederlo. De esta forma la propiedad P(i+1) resulta ser verdadera.
     \end{itemize}
 \end{itemize}
 
 
-De esta forma probamos que alcanzamos a todos los estados. Por ende, si existe una solución válida la encontramos. Más aún, como podamos por tiempos quedándonos siempre la mejor solución que encontramos, siempre vamos a visitar el estado final que se consigue en el menor tiempo. 
+De esta forma probamos que alcanzamos a todos los estados. Por ende, si existe una solución válida la encontramos. Más aún, como podamos por tiempos quedándonos siempre la mejor solución que encontramos, siempre vamos a visitar el estado final que se consigue en el menor tiempo.
 
 Para el caso que no exista solución, inicializamos ciertas variables en -1 para indicar que no hemos conseguido una solución. Si al final del algoritmo éstas variables no cambiaron, sabemos que no hay solución.
 \subsection{Complejidad del algoritmo}
@@ -410,7 +328,7 @@ Podemos conseguir la cantidad de nodos de un árbol m-esimo de altura h con la f
 
 La igualdad es válida por ser una serie geométrica.
 
-Ésto hace que la cantidad de nodos del árbol de backtracking sea 
+Ésto hace que la cantidad de nodos del árbol de backtracking sea
 \[
 \sum_{i=0}^{(N+M)!}{(N+M)}^{2i} \Rightarrow \mathcal{O}({(N+M)}^{2(N+M)! +2 })\Rightarrow \mathcal{O}({(N+M)}^{(N+M)!})
 \]
@@ -425,7 +343,7 @@ Cada nodo cuesta $\mathcal{O}((N+M)!)$ como fue demostrado en el pseudocódigo d
 
 
 \subsubsection{Complejidad tomando en cuenta las podas}
-La complejidad teniendo en cuenta que la gran mayoría de los movimientos son de enviar 2 personas de ida y 1 de vuelta, con lo que la cantidad de estados que se recorrerán por rama (altura del árbol) es aproximadamente N+M: 
+La complejidad teniendo en cuenta que la gran mayoría de los movimientos son de enviar 2 personas de ida y 1 de vuelta, con lo que la cantidad de estados que se recorrerán por rama (altura del árbol) es aproximadamente N+M:
 \[
 \mathcal{O}({(N+M)}^{(N+M)} * (N+M)!)
 \]
@@ -434,7 +352,7 @@ La complejidad teniendo en cuenta que la gran mayoría de los movimientos son de
 \subsection{Experimentación}
 
 Primero generamos una serie de tests para verificar el algoritmo.
-Éstos tests fueron creados a mano intentando cubrir la mayor cantidad de casos interesantes. El más destacable es el caso de 3 arqueólogos y 3 caníbales, que requiere que \textit{vuelta()} envíe a la orilla origen 2 personas. 
+Éstos tests fueron creados a mano intentando cubrir la mayor cantidad de casos interesantes. El más destacable es el caso de 3 arqueólogos y 3 caníbales, que requiere que \textit{vuelta()} envíe a la orilla origen 2 personas.
 También probamos quitar en \textit{resolver()} la verificacion de if ($N < M \land N > 0$) then return -1 y probar con esos casos. Como era de esperar éstos devolvieron "-1".
 
 \vspace*{5mm}

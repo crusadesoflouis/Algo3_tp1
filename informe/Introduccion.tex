@@ -2,18 +2,64 @@
 
 En este informe, vamos a analizar resoluciones distintas para el problema presentado a continuación.
 
-Problema: Dada una secuencia de numeros naturales, se pide encontrar pintar de color rojo a una secuencia estrictamente creciente y de color azul a una secuencia estrictamente decreciente
-de manera tal que se maximice la cantidad de elementos pintados.
+Problema: Dada una secuencia de numeros naturales, se pide  pintar de color rojo a una secuencia estrictamente creciente y de color azul a una secuencia estrictamente decreciente
+de manera tal que se minimice la cantidad de elementos sin pintar.
 
-Por ejemplo dada la secuencia 5 8 1 0 4 7 8  rojo = 0 4 7 8 azul = 5 8 1
-1 2 3 3 2 1 1 2 3 4 4 3 2 1 = rojo 1 2 3 4 azul =  4 3 2 1
+Por ejemplo dada la secuencia:
+\begin{flushleft}
+\newline
+  \begin{tabular}{ | l | c | r | l | c | r | l | c | r | l |}
+    \hline
+1 & 2 & 2 & 1 & 1 & 2 & 3 & 3 & 2 & 1\\ \hline
+  \end{tabular}
+\newline
+Rojo:
+\newline
+  \begin{tabular}{ | l | c | r |}
+    \hline
+    1 & 2 & 3 \\ \hline
+  \end{tabular}
+ \newline
+  Azul:
+  \newline
+  \begin{tabular}{ | l | c | r |}
+    \hline
+    3 & 2 & 1 \\ \hline
+  \end{tabular}
+  \newline
+Resultado = 4
+\vspace*{5mm}
+\newline
+  \begin{tabular}{ | l | c | r | l | c | r | l |}
+    \hline
+7 & 2 & 4 & 5 & 5 & 3 & 9\\ \hline
+  \end{tabular}
+\newline
+Rojo:
+\newline
+  \begin{tabular}{ | l | c | r | r |}
+    \hline
+    2 & 4 & 5 & 9\\ \hline
+  \end{tabular}
+ \newline
+  Azul:
+  \newline
+  \begin{tabular}{ | l | c | r |}
+    \hline
+    7 & 5 & 3 \\ \hline
+  \end{tabular}
+  \newline
+Resultado = 0
 
-1 2 3 4 4  = 1 2 3 4,  4
-1 2 3 4 4 4 = 1 2 3 4, 4
-
-
+\vspace*{5mm}
 
 Para ello resolveremos este problema de tres formas distintas:
-La primera será resuelta por medio de Backtracking,en la segunda se le agregará una poda al mismo algoritmo del ejercicio 1 y por ultimo se explicará un algoritmo de programacion dinámica.
 
-Cada ejercicio presentará con una introducción explicación, hipotesis de complejidad, resolución y conclusion.
+\vspace*{5mm}
+\begin{itemize}
+    \item Backtracking.
+    \item Backtracking con poda.
+    \item Dinámica.
+\end{itemize}
+
+\end{flushleft}
