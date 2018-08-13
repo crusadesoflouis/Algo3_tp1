@@ -9,6 +9,8 @@
 \usepackage{comment}
 \usepackage[utf8]{inputenc}
 \usepackage{tikz}
+\usepackage{graphicx}
+\graphicspath{ {imagenes/} }
 
 
 \usetikzlibrary{arrows.meta}
@@ -21,8 +23,8 @@
 
 \materia{Algoritmos y Estructuras de Datos III}
 \submateria{Primer Cuatrimestre de 2017}
-\titulo{Recuperatorio de Trabajo Práctico I}
-\subtitulo{Pintando Secuencias }
+\titulo{Recuperatorio Trabajo Práctico I}
+\subtitulo{Pintando Secuencias}
 %\grupo{Grupo }
 \integrante{Arroyo, Luis Alberto}{913/13}{luis.arroyo.90@gmail.com} % obligatorio
 
@@ -40,9 +42,6 @@
 \newpage
 
 \input{Introduccion}
-
-\newpage
-
 \input{Ejercicio1}
 
 \newpage
@@ -52,85 +51,12 @@
 \newpage
 
 \input{Ejercicio3}
-\newpage
 
-\input{Cambios}
+
+%\newpage
+
+%\newpage
+
+%\input{Cambios}
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\begin{algorithm}[H]
-\SetAlgoLined
-\KwResult{Write here the result }
- initialization\;
- \While{While condition}{
-  instructions\;
-  \eIf{condition}{
-   instructions1\;
-   instructions2\;
-   }{
-   instructions3\;
-  }
- }
-\begin{algorithm}[H]
-\caption{Backtracking}
-\begin{algorithmic}[1]
-  \Procedure{CantLibres}{\texttt{vector<int>} elementos,\texttt{vector<bool>} validar} $\to $ \texttt{int}
-    \State \textbf{//n es el tamaño de elementos.}
-    \State fin $\gets$ elementos.size();
-    \For {$i = 0; i < n; i{+}{+}$}
-    \State j $\gets$ i;
-    \State \While{ (j $<$ fin) }
-    \State \texttt{pila<int>} pilaRoja
-    \State \texttt{pila<int>} pilaAzul
-    \State Rojos(elementos,validar,pilaRoja,i,j)
-    \State EstablecerValidos(validar,pilaroja)
-    \State Azul(elementos,validar,pilaAzul,i,j)
-    \State EstablecerValidos(validar,pilaroja)
-	\State	res $\gets$ maximo(pilaAzul,PilaRoja)
-	\EndWhile
-	\EndFor
-\State return res
-\end{algorithmic}
-\underline{Complejidad:} $\mathcal{O}(N)x(\sum_{j=1}^{n} j^2 +\mathcal{O}(N^3)$)
-
-
-
-\vspace*{5mm}
-\end{algorithm}
-
- \caption{How to write algorithms}
-
-
-\end{algorithm}

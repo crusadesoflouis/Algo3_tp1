@@ -15,7 +15,7 @@ using namespace std;
 int main() {
 
   int valor=0;
-  int n=0;
+  int tamanio=0;
   cin>>tamanio;
   vector<int>elementos;
   vector<bool>validar;
